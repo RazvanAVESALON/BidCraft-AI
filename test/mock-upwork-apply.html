@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Submit a Proposal | Upwork</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 800px; margin: auto; }
+    .form-group { margin-bottom: 20px; }
+    textarea { width: 100%; height: 200px; padding: 12px; font-size: 14px; border: 1px solid #ccc; border-radius: 6px; }
+    .event-log { background: #f0f0f0; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="job-header">
+    <h1 data-test="job-title">Full-Stack React & Node.js Developer Needed</h1>
+    <div data-test="job-description">
+      Build a dashboard connecting to our PostgreSQL database with real-time charts and export to Excel features.
+    </div>
+  </div>
+
+  <hr style="margin: 20px 0;">
+
+  <h2>Proposal Details</h2>
+  <div class="form-group">
+    <label id="cover_letter_label" for="coverLetter"><strong>Cover Letter</strong></label>
+    <textarea id="coverLetter" aria-labelledby="cover_letter_label" placeholder="Introduce yourself and explain why you're a strong fit for this job..."></textarea>
+  </div>
+
+  <div class="event-log" id="eventLog">
+    Events: <span id="eventStatus">Waiting for input...</span>
+  </div>
+
+  <script>
+    const textarea = document.getElementById("coverLetter");
+    const eventStatus = document.getElementById("eventStatus");
+    let inputTriggered = false;
+    let changeTriggered = false;
+
+    textarea.addEventListener("input", () => {
+      inputTriggered = true;
+      eventStatus.textContent = `[INPUT EVENT DETECTED] Text Length: ${textarea.value.length}`;
+    });
+
+    textarea.addEventListener("change", () => {
+      changeTriggered = true;
+      eventStatus.textContent += " | [CHANGE EVENT DETECTED]";
+    });
+  </script>
+</body>
+</html>

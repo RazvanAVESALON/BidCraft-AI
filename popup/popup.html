@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BidCraft AI</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-group">
+        <div class="logo-icon">⚡</div>
+        <div>
+          <h1 class="logo-title">BidCraft <span class="badge-ai">AI</span></h1>
+          <p class="logo-subtitle">Upwork Proposal Copilot</p>
+        </div>
+      </div>
+      <div class="quota-badge" id="quotaBadge" title="Gemini API key status">
+        <span class="quota-dot"></span>
+        <span id="quotaText">Checking...</span>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-tab="generateTab">
+        <span class="tab-icon">🚀</span> Generate
+      </button>
+      <button class="tab-btn" data-tab="profileTab">
+        <span class="tab-icon">👤</span> My Profile
+      </button>
+      <button class="tab-btn" data-tab="settingsTab">
+        <span class="tab-icon">⚙️</span> Settings
+      </button>
+    </nav>
+
+    <!-- Tab 1: Generate Proposal -->
+    <main class="tab-content active" id="generateTab">
+      <!-- Job Detection Card -->
+      <section class="card job-card">
+        <div class="card-header">
+          <span class="card-label">Job Detection</span>
+          <div class="header-actions">
+            <button class="btn-text" id="demoJobBtn" title="Load sample Upwork job for instant testing">⚡ Demo Job</button>
+            <button class="btn-text" id="refreshJobBtn" title="Re-scan current tab">🔄 Refresh</button>
+          </div>
+        </div>
+        <div id="jobStatus" class="job-status">
+          <div class="status-indicator"></div>
+          <span id="jobStatusText">Scanning active tab...</span>
+        </div>
+        <div id="jobPreview" class="job-preview hidden">
+          <h3 id="detectedJobTitle" class="job-title-preview"></h3>
+          <div class="job-tags" id="detectedJobTags"></div>
+        </div>
+        <div id="manualInputSection" class="manual-input-section hidden">
+          <label class="input-label" for="manualJobTitle">Job Title</label>
+          <input type="text" id="manualJobTitle" class="form-input" placeholder="e.g. Senior Python Engineer">
+          <label class="input-label" for="manualJobDesc" style="margin-top: 6px;">Job Description</label>
+          <textarea id="manualJobDesc" class="form-input" rows="3" placeholder="Paste full job description here..."></textarea>
+        </div>
+        <button class="btn-text-toggle" id="toggleManualBtn">✏️ Or paste job manually</button>
+      </section>
+
+      <!-- Proposal Framework Selector -->
+      <section class="card">
+        <label class="input-label" for="frameworkSelect">Copywriting Framework</label>
+        <select id="frameworkSelect" class="form-select">
+          <option value="problem_solver">🎯 The Problem-Solver (Identifies root pain & offers solution)</option>
+          <option value="direct_proof">💼 The Direct Proof (Leads with relevant past work & metrics)</option>
+          <option value="fast_turnaround">⚡ The Fast Turnaround (Short, punchy & high urgency)</option>
+        </select>
+
+        <label class="input-label" for="customInstructions" style="margin-top: 10px;">
+          Extra Instructions <span class="label-muted">(Optional)</span>
+        </label>
+        <input type="text" id="customInstructions" class="form-input" placeholder="e.g., Emphasize my Python experience, ask about their API">
+        
+        <button class="btn-primary" id="generateBtn">
+          <span class="btn-icon">✨</span>
+          <span id="generateBtnText">Generate Proposal</span>
+        </button>
+      </section>
+
+      <!-- Output Section -->
+      <section class="card output-card hidden" id="outputSection">
+        <div class="card-header">
+          <span class="card-label">Crafted Proposal</span>
+          <div class="meta-counts">
+            <span id="wordCount">0 words</span>
+          </div>
+        </div>
+        <textarea id="proposalOutput" class="proposal-textarea" rows="10"></textarea>
+        <div class="output-actions">
+          <button class="btn-secondary" id="copyBtn">
+            <span>📋</span> Copy to Clipboard
+          </button>
+          <button class="btn-primary" id="autoInsertBtn" title="Directly insert proposal into Upwork text area">
+            <span>✍️</span> Insert into Upwork
+          </button>
+        </div>
+        <div id="copyNotice" class="notice-toast hidden">Copied to clipboard!</div>
+      </section>
+    </main>
+
+    <!-- Tab 2: Profile Settings -->
+    <main class="tab-content" id="profileTab">
+      <section class="card">
+        <div class="card-header">
+          <span class="card-label">Your Freelancer Profile</span>
+          <span class="privacy-tag">🔒 Stored on this device</span>
+        </div>
+        <p class="card-description">
+          The AI weaves this information into your proposals so they feel personal and authentic.
+        </p>
+
+        <label class="input-label" for="profileName">Your Name / Working Handle</label>
+        <input type="text" id="profileName" class="form-input" placeholder="e.g., Razvan">
+
+        <label class="input-label" for="profileRole">Professional Title</label>
+        <input type="text" id="profileRole" class="form-input" placeholder="e.g., AI & Python Engineer">
+
+        <label class="input-label" for="profileSkills">Core Skills (comma-separated)</label>
+        <input type="text" id="profileSkills" class="form-input" placeholder="e.g., Python, FastAPI, LLMs, Web Scraping, React">
+
+        <label class="input-label" for="profileLinks">Portfolio / GitHub Links</label>
+        <textarea id="profileLinks" class="form-input" rows="2" placeholder="e.g., github.com/username&#10;myportfolio.com"></textarea>
+
+        <label class="input-label" for="profileBio">Brief Bio / Proof of Work</label>
+        <textarea id="profileBio" class="form-input" rows="3" placeholder="e.g., 4+ years developing scalable AI systems and web automation tools. Focused on high-speed delivery and clean code."></textarea>
+
+        <button class="btn-primary" id="saveProfileBtn">
+          <span>💾</span> Save Profile
+        </button>
+        <div id="profileSavedNotice" class="notice-toast hidden">Profile saved locally!</div>
+      </section>
+    </main>
+
+    <!-- Tab 3: Settings -->
+    <main class="tab-content" id="settingsTab">
+      <section class="card">
+        <span class="card-label">AI Engine Configuration</span>
+        <p class="card-description">
+          Powered by <strong>Google Gemini Flash</strong>. BidCraft uses your own free Gemini API key, so there are no subscriptions and no BidCraft servers.
+        </p>
+
+        <label class="input-label" for="apiKeyInput">Gemini API Key</label>
+        <input type="password" id="apiKeyInput" class="form-input" placeholder="Enter your Gemini API key">
+        <p class="input-hint">
+          Don't have one? Get a free key in 30 seconds at <a href="https://aistudio.google.com/" target="_blank" class="link">Google AI Studio</a>.
+        </p>
+
+        <button class="btn-primary" id="saveApiKeyBtn">
+          <span>🔑</span> Save API Key
+        </button>
+        <div id="apiKeySavedNotice" class="notice-toast hidden">API Key saved securely!</div>
+      </section>
+
+      <!-- Privacy Card -->
+      <section class="card">
+        <span class="card-label">Privacy</span>
+        <ul class="pro-features">
+          <li>✓ Profile and API key are stored only in this browser</li>
+          <li>✓ Job details and profile are sent directly to Google Gemini only when you click Generate</li>
+          <li>✓ No analytics, no tracking, no BidCraft servers</li>
+        </ul>
+        <button class="btn-secondary" id="clearDataBtn">
+          <span>🗑️</span> Delete all my data
+        </button>
+        <div id="clearDataNotice" class="notice-toast hidden">All data deleted.</div>
+      </section>
+    </main>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
