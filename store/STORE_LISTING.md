@@ -72,7 +72,7 @@ Helps freelancers write proposals for Upwork job posts by reading the open job a
 - ☑ I do not use or transfer user data for purposes unrelated to my item's single purpose
 - ☑ I do not use or transfer user data to determine creditworthiness or for lending purposes
 
-**Privacy policy URL:** `https://<your-github-username>.github.io/BidCraft-AI/privacy-policy.html`
+**Privacy policy URL:** `https://razvanavesalon.github.io/BidCraft-AI/privacy-policy.html`
 
 ---
 
